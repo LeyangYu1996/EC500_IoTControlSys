@@ -44,13 +44,16 @@ int main(int argc, char *argv[])
      if (newsockfd < 0) 
           error("ERROR on accept");
      bzero(buffer,256);
-
+     int i = 0;
      while(1){
+        i++;
          n = read(newsockfd,buffer,255);
          if (n < 0) error("ERROR reading from socket");
          printf("Here is the message: %s\n",buffer);
          n = write(newsockfd,"ACK",3);
          if (n < 0) error("ERROR writing to socket");
+         if(i>=1000) i=0;
+         printf("%d\n",i);
      }
 
      close(newsockfd);

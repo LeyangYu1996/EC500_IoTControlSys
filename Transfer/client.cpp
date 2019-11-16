@@ -7,6 +7,13 @@
 #include <netinet/in.h>
 #include <netdb.h> 
 #include <time.h>       /* time_t, struct tm, difftime, time, mktime */
+#include <chrono>
+#include <thread>
+#include <sstream>
+
+using namespace std::chrono;
+
+int interval = 1000;
 
 void error(const char *msg)
 {
@@ -45,15 +52,27 @@ int main(int argc, char *argv[])
     //printf("Please enter the message: ");
     bzero(buffer,256);
     //fgets(buffer,255,stdin);
-
-
+    std::ostringstream oss;
     while(1){
+        auto x = std::chrono::steady_clock::now() + std::chrono::milliseconds(interval);
 
         time_t my_time = time(NULL); 
-        strcpy(buffer, ctime(&my_time));
+
+        milliseconds ms = duration_cast< milliseconds >(
+            system_clock::now().time_since_epoch());
+
+        printf("%lld",ms.count());
+
+        oss << ms.count();
+        //strcpy(buffer, ctime(&my_time));
+        strcpy(buffer, oss.str().c_str());
+        
+        oss.str("");
+        oss.clear();
 
         while(strcmp(buffer,"ACK")!=0){
             n = write(sockfd,buffer,strlen(buffer));
+            //sendSig();
             if (n < 0) 
                 error("ERROR writing to socket");
             bzero(buffer,256);
@@ -63,6 +82,7 @@ int main(int argc, char *argv[])
         if (n < 0) 
              error("ERROR reading from socket");
 
+        std::this_thread::sleep_until(x);
         //printf("%s\n",buffer);
      }
 
