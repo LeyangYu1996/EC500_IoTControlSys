@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+// Ref: https://www.cnblogs.com/sirius-swu/p/6682746.html
 float read_func(){
     int fd;
     char buf[3];
