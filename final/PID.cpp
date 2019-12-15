@@ -151,15 +151,12 @@ int main(int argc, char *argv[])
             system_clock::now().time_since_epoch());
             
      long long int t4 = ts4.count();
-            
      long long int t2 = atoll(buffer);
-
      long long int terr = t2 - ( t1 + (t4 - t1) / 2);
      
      printf("Time Error is %d\n", terr);
      
      long long int time_after_sync;
-     
      long long int current_time;
      
      // Start main system loop
